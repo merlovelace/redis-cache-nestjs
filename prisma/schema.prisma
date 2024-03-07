@@ -1,0 +1,62 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model store {
+  id String @id @default(uuid())
+  avatar String? @db.Text
+  cover String? @db.Text
+  name String?
+  email String
+  password String
+  isDeleted Boolean @default(false)
+  isVerified Boolean @default(false)
+}
+
+model store_address {
+  id String @id @default(uuid())
+  userId String
+  city String
+  district String
+  neighbourhood String
+  address String @db.Text
+  phone String
+  isDeleted Boolean @default(false)
+  isVerified Boolean @default(false)
+}
+
+model advert {
+  id String @id @default(uuid())
+  userId String
+  addressId String
+  name String
+  description String @db.Text
+  price Float
+  favoriteCount Int @default(0)
+  isActive Boolean @default(false)
+  isDeleted Boolean @default(false)
+}
+
+model advert_photo {
+  id String @id @default(uuid())
+  advertId String
+  location String
+  isDeleted Boolean @default(false)
+}
+
+model advert_interaction{
+  id String @id @default(uuid())
+  advertId String
+  phone Int @default(0)
+  address Int @default(0)
+  instagram_url Int @default(0)
+  web_url Int @default(0)
+}
