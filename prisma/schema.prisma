@@ -19,6 +19,7 @@ model store {
   password String
   isDeleted Boolean @default(false)
   isVerified Boolean @default(false)
+  adverts advert[]
 }
 
 model store_address {
@@ -31,18 +32,23 @@ model store_address {
   phone String
   isDeleted Boolean @default(false)
   isVerified Boolean @default(false)
+  adverts advert[]
 }
 
 model advert {
   id String @id @default(uuid())
-  userId String
+  storeId String
   addressId String
   name String
   description String @db.Text
   price Float
   favoriteCount Int @default(0)
-  isActive Boolean @default(false)
+  isActive Boolean @default(true)
   isDeleted Boolean @default(false)
+  address store_address @relation(fields: [addressId], references: [id])
+  photos advert_photo[]
+  interactions advert_interaction[]
+  owner store @relation(fields: [storeId], references: [id])
 }
 
 model advert_photo {
@@ -50,6 +56,8 @@ model advert_photo {
   advertId String
   location String
   isDeleted Boolean @default(false)
+  advert advert @relation(fields: [advertId], references: [id])
+
 }
 
 model advert_interaction{
@@ -59,4 +67,5 @@ model advert_interaction{
   address Int @default(0)
   instagram_url Int @default(0)
   web_url Int @default(0)
+  advert advert @relation(fields: [advertId], references: [id])
 }

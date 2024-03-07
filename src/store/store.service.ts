@@ -20,7 +20,16 @@ export class StoreService {
 
   async createStoreAddress(user: any, body: any){
     try{
-
+      await this.prisma.store_address.create({
+        data: {
+          userId: user.id,
+          city: body.city,
+          district: body.district,
+          neighbourhood: body.neighbourhood,
+          address: body.address,
+          phone: body.phone
+        }
+      })
 
     }catch (e) {
       console.log(e);

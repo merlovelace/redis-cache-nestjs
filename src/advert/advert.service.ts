@@ -7,11 +7,23 @@ export class AdvertService {
   constructor(private prisma: PrismaService) {
   }
 
-  async createAdvert(body: AdvertCreate){
+  async createAdvert(body: AdvertCreate, user: any){
     try{
+      const addressInfo = await this.prisma.store_address.findUnique({
+        where: {
+          id: body.addressId,
+          isDeleted: false,
+          isVerified: true
+        }
+      })
+
+      if(!addressInfo){
+        throw new HttpException("Adres bulunamadı",HttpStatus.NOT_FOUND)
+      }
+
       const advert = await this.prisma.advert.create({
         data: {
-          userId: "",
+          storeId: user.id,
           addressId: body.addressId,
           name: body.name,
           description: body.description,
@@ -35,12 +47,38 @@ export class AdvertService {
 
   async getAllAdverts(){
     try{
-      return this.prisma.advert.findMany({
+      return await  this.prisma.advert.findMany({
         where: {
           isActive: true,
-          isDeleted: true
+          isDeleted: false
+        },
+        include: {
+          address: {
+            select: {
+              city: true,
+              district: true,
+              neighbourhood: true,
+              address: true,
+              phone: true
+            }
+          },
+          photos: {
+            select: {
+              location: true
+            }
+          },
+          interactions: {
+            select: {
+              phone: true,
+              instagram_url: true,
+              web_url: true,
+              address: true
+            }
+          }
         }
       })
+
+
     }catch (e) {
       console.log(e);
       throw new HttpException({ status: HttpStatus.BAD_REQUEST, error: e },
