@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Headers, Patch, Get, Param, Query, Delete } from "@nestjs/common";
+import { Body, Controller, Post, Request, Patch, Get, Param, Query, Delete } from "@nestjs/common";
 import { AdvertService } from "./advert.service";
 import { CreateAdvertDto } from "../dto/advert.dto";
 
@@ -8,11 +8,9 @@ export class AdvertController {
   }
 
   @Post("/")
-  createAdvert(@Headers() headers: any,@Body() body: CreateAdvertDto){
-    const user: any = JSON.parse(headers.user);
-    delete headers.user;
+  createAdvert(@Request() req,@Body() body: CreateAdvertDto){
 
-   return this.service.createAdvert(body, user)
+   return this.service.createAdvert(body, req.user)
   }
 
   @Get("/")

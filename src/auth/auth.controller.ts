@@ -1,4 +1,4 @@
-import { Body, Controller, Headers, Post } from "@nestjs/common";
+import { Body, Controller, Headers, Post,Request } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { LoginDto, RegisterDto, VerifyDto } from "../dto/auth.dto";
 
@@ -18,18 +18,16 @@ export class AuthController {
   }
 
   @Post("verify")
-  verify(@Headers() headers: any, @Body() body: VerifyDto){
-    const user: any = JSON.parse(headers.user);
-    delete headers.user;
+  verify(@Request() req, @Body() body: VerifyDto){
 
-    return this.service.verify(body, user)
+
+    return this.service.verify(body, req.user)
   }
 
   @Post("logout")
-  logout(@Headers() headers: any){
-    const user: any = JSON.parse(headers.user);
-    delete headers.user;
+  logout(@Request() req){
 
-    return this.service.logout(user)
+
+    return this.service.logout(req.user)
   }
 }

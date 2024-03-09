@@ -1,4 +1,4 @@
-import { Body, Controller, Patch, Post, Headers } from "@nestjs/common";
+import { Body, Controller, Patch, Post, Headers,Request } from "@nestjs/common";
 import { StoreService } from "./store.service";
 import { CreateAddressDto, UpdateAddressDto, UpdateStoreDto } from "../dto/store.dto";
 
@@ -8,27 +8,21 @@ export class StoreController {
   }
 
   @Patch("/")
-  updateStore(@Headers() headers: any, @Body() body: UpdateStoreDto){
-    const user: any = JSON.parse(headers.user);
-    delete headers.user;
+  updateStore( @Body() body: UpdateStoreDto,@Request() req){
 
-    return this.service.updateStore(user, body)
+    return this.service.updateStore(req.user, body)
   }
 
   @Post("address")
-  createStoreAddress(@Headers() headers: any, @Body() body: CreateAddressDto){
-    const user: any = JSON.parse(headers.user);
-    delete headers.user;
+  createStoreAddress(@Body() body: CreateAddressDto,@Request() req){
 
-    return this.service.createStoreAddress(user, body)
+    return this.service.createStoreAddress(req.user, body)
   }
 
   @Patch("address")
-  updateStoreAddress(@Headers() headers: any, @Body() body: UpdateAddressDto){
-    const user: any = JSON.parse(headers.user);
-    delete headers.user;
+  updateStoreAddress(@Body() body: UpdateAddressDto,@Request() req){
 
-    return this.service.updateStoreAddress(user, body)
+    return this.service.updateStoreAddress(req.user, body)
   }
 
 
